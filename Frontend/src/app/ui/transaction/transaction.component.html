@@ -1,0 +1,44 @@
+<div class="body">
+
+  <mat-card class="account">
+    <form [formGroup]="transactionForm" (ngSubmit)="setProsumer($event)">
+      <mat-form-field appearance="outline">
+        <mat-label>Endereço prosumer</mat-label>
+        <input matInput placeholder="Placeholder" formControlName="prosumerAddress">
+        <mat-icon matSuffix>account_balance_wallet</mat-icon>
+        <mat-hint></mat-hint>
+      </mat-form-field>
+      &nbsp;
+      <mat-form-field appearance="outline">
+        <mat-label>Unidade consumidora</mat-label>
+        <input matInput type="number" min=0 placeholder="Placeholder" formControlName="unidadeConsumidora">
+        <mat-icon matSuffix>electric_meter</mat-icon>
+        <mat-hint></mat-hint>
+      </mat-form-field>
+      &nbsp;
+      <mat-form-field appearance="outline">
+        <mat-label>Energia consumida</mat-label>
+        <input matInput type="number" min=0 placeholder="Placeholder" formControlName="energiaConsumida">
+        <mat-icon matSuffix>bolt</mat-icon>
+        <mat-hint></mat-hint>
+      </mat-form-field>
+    &nbsp;
+      <mat-form-field appearance="outline">
+        <mat-label>Energia injetada</mat-label>
+        <input matInput type="number" min=0 placeholder="Placeholder" formControlName="energiaInjetada">
+        <mat-icon matSuffix>bolt</mat-icon>
+        <mat-hint></mat-hint>
+      </mat-form-field>
+    </form>
+    &nbsp;
+    <div class="button-container">
+      <button mat-raised-button color="accent" [disabled]="!transactionForm.valid" (click)="setProsumer($event)">
+        <mat-icon *ngIf="!transactionForm.valid">lock</mat-icon>
+        <mat-icon *ngIf="transactionForm.valid">input</mat-icon>&nbsp;Settar prosumer
+      </button>
+      &nbsp;
+    </div>
+  </mat-card>
+  &nbsp;
+  <app-data-table></app-data-table>
+</div>

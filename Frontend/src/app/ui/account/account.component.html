@@ -1,0 +1,48 @@
+<div class="body">
+  <mat-card
+    class="account"
+    *ngIf="
+      direction == '0x428F1771706f015a82B944816E1F373a413c96d6';
+      else normal
+    "
+  >
+    <div style="text-align: center">
+      <section class="header">
+        <h4>Your address is:</h4>
+        <h6>{{ direction }}</h6>
+        <h4>Balance:</h4>
+        <h5>{{ balance }} ETH</h5>
+      </section>
+    </div>
+  </mat-card>
+  <ng-template #normal>
+    <mat-card class="account">
+      <div style="text-align: center">
+        <section class="header">
+          <h4>Seu endereço é:</h4>
+          <h6>{{ direction }}</h6>
+          <h4>Saldo:</h4>
+          <h5>{{ balance }} ETH</h5>
+        </section>
+      </div>
+    </mat-card>
+  </ng-template>
+</div>
+<div class="body" *ngIf="direction == undefined">
+  <mat-card class="account">
+    <div style="text-align: center">
+      <section class="header">
+        <h3>Clique em conectar conta para conectar o provedor de carteira</h3>
+        <button
+          mat-raised-button
+          color="accent"
+          class="big-round-shape-button"
+          (click)="connectAccount()"
+        >
+          Conectar conta
+        </button>
+        &nbsp;
+      </section>
+    </div>
+  </mat-card>
+</div>
