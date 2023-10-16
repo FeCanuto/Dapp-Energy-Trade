@@ -1,8 +1,12 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { RenewableContractService } from "src/app/services/contract/renewable.contract.service";
+import Web3 from 'web3';
 
+const web3 = new Web3(Web3.givenProvider);
+const contractAddress = "0x99BD22A29254F3CFDeCC5d373975a6aFb2A734F5"; // Replace with your contract address
+const tokenAbi =  require("../../../../../Blockchain/build/contracts/EnergyTrade.json");
+const contractInstance = new web3.eth.Contract(tokenAbi.abi, contractAddress);
 
 /**
  * @title Table with pagination
@@ -12,15 +16,18 @@ import { RenewableContractService } from "src/app/services/contract/renewable.co
   styleUrls: ['data-table.component.scss'],
   templateUrl: 'data-table.component.html',
 })
-export class DataTableComponent {
-  displayedColumns = ['position', 'name', 'weight', 'symbol'];
+export class DataTableComponent implements OnInit{
+  prosumerList: Element[];
+  displayedColumns = ['uc', 'energiaConsumida', 'energiaInjetada'];
   dataSource = new MatTableDataSource<Element>(ELEMENT_DATA);
-
+  
   @ViewChild(MatPaginator) paginator: MatPaginator;
-
-  constructor(private contract: RenewableContractService) {
-
+  
+  ngOnInit(): void {
+    const prosumerList: Element[] = this.getProsumerArray();
+    //this.dataSource.data = prosumerList;
   }
+
   /**
    * Set the paginator after the view init since this component will
    * be able to query its view for the initialized paginator.
@@ -28,39 +35,28 @@ export class DataTableComponent {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
+
+    //Pegar array de struct prosumer definida no contrato EnergyTrade
+  getProsumerArray(): Element[] {    
+    contractInstance.methods.getProsumerArr().call().then((result) => {
+      this.prosumerList = result;
+    });
+    console.log(this.prosumerList);
+    return this.prosumerList;
+  }
+
+  //Pagar prosumer que tem créditos de energia a serem recebidos
+  payProsumer(): void{
+    contractInstance.methods.pagarProsumerOwner().call
+  }
 }
 
-// int16 uc; //Unidade consumidora
-// uint16 energiaConsumida; //Energia consumida em Kwh
-// uint16 energiaInjetada; //Energia injetada em Kwh
-
-
 export interface Element {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
+  uc: number;
+  energiaConsumida: number;
+  energiaInjetada: number;
 }
 
 const ELEMENT_DATA: Element[] = [
-  { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
-  { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
-  { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
-  { position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be' },
-  { position: 5, name: 'Boron', weight: 10.811, symbol: 'B' },
-  { position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C' },
-  { position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
-  { position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' },
-  { position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
-  { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' },
-  { position: 11, name: 'Sodium', weight: 22.9897, symbol: 'Na' },
-  { position: 12, name: 'Magnesium', weight: 24.305, symbol: 'Mg' },
-  { position: 13, name: 'Aluminum', weight: 26.9815, symbol: 'Al' },
-  { position: 14, name: 'Silicon', weight: 28.0855, symbol: 'Si' },
-  { position: 15, name: 'Phosphorus', weight: 30.9738, symbol: 'P' },
-  { position: 16, name: 'Sulfur', weight: 32.065, symbol: 'S' },
-  { position: 17, name: 'Chlorine', weight: 35.453, symbol: 'Cl' },
-  { position: 18, name: 'Argon', weight: 39.948, symbol: 'Ar' },
-  { position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K' },
-  { position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca' },
+  {uc: 123, energiaConsumida: 100, energiaInjetada: 150}
 ];

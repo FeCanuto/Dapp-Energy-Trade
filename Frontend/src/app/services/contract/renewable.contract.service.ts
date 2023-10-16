@@ -10,7 +10,6 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 
 declare let require: any;
 const tokenAbi = require("../../../../../Blockchain/build/contracts/EnergyTrade.json");
-declare let window: any;
 
 @Injectable({
   providedIn: "root",
@@ -18,6 +17,7 @@ declare let window: any;
 export class RenewableContractService {
   public accountsObservable = new Subject<string[]>();
   public compatible: boolean;
+  prosumerData: any[];
   web3Modal;
   web3js;
   provider;
@@ -71,29 +71,6 @@ export class RenewableContractService {
               from: originAccount[0],
             }
           );
-        })
-        .then((status) => {
-          if (status) {
-            return resolve({ status: true });
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-
-          return reject("Error transfering Ether");
-        });
-    });
-  }
-
-  gettingProsumer() {
-    return new Promise((resolve, reject) => {
-      var contract = require("@truffle/contract");
-      const energyContract = contract(tokenAbi);
-      energyContract.setProvider(this.provider);
-      energyContract
-        .deployed()
-        .then((instance) => {
-          return instance.getProsumerArr();
         })
         .then((status) => {
           if (status) {
