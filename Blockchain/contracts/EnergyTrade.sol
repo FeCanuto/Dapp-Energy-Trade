@@ -12,6 +12,7 @@ contract EnergyTrade {
     mapping(address => Prosumer) addressToProsumer;
 
     struct Prosumer {
+        address prosumerAddress;
         uint16 uc; //Unidade consumidora
         uint16 energiaConsumida; //Energia consumida em Kwh
         uint16 energiaInjetada; //Energia injetada em Kwh
@@ -38,6 +39,7 @@ contract EnergyTrade {
     ) public isOwner {
         if (addressToProsumer[endereco].uc != unidadeConsumidora) {
             Prosumer memory newprosumer = Prosumer({
+                prosumerAddress: endereco,
                 uc: unidadeConsumidora,
                 energiaConsumida: consumida,
                 energiaInjetada: injetada
@@ -47,6 +49,7 @@ contract EnergyTrade {
             prosumer.push(endereco);
             prosumerCount++;
         } else {
+            addressToProsumer[endereco].prosumerAddress = endereco;
             addressToProsumer[endereco].uc = unidadeConsumidora;
             addressToProsumer[endereco].energiaConsumida = consumida;
             addressToProsumer[endereco].energiaInjetada = injetada;
@@ -62,7 +65,7 @@ contract EnergyTrade {
         return result;
     }
 
-    function pagarProsumerOwner(address endereco) public isOwner {
+    function payProsumerOwner(address endereco) public isOwner {
         require(
             addressToProsumer[endereco].energiaInjetada >
                 addressToProsumer[endereco].energiaConsumida,
