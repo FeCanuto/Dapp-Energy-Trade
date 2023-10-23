@@ -1,5 +1,10 @@
 <div class="example-container mat-elevation-z8">
-  <mat-table #table [dataSource]="dataSource">
+  <mat-table #table [dataSource]="prosumerList">
+
+    <ng-container matColumnDef="prosumerAddress">
+      <mat-header-cell *matHeaderCellDef> Endereço Prosumer </mat-header-cell>
+      <mat-cell *matCellDef="let element" [ngClass]="''"> {{truncateText(element.prosumerAddress, 38)}} </mat-cell>
+    </ng-container>
 
     <ng-container matColumnDef="uc">
       <mat-header-cell *matHeaderCellDef> Unidade consumidora </mat-header-cell>
@@ -16,6 +21,15 @@
       <mat-cell *matCellDef="let element"> {{element.energiaInjetada}} </mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="payProsumer">
+      <mat-header-cell *matHeaderCellDef> Pagar Prosumer</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <button mat-raised-button color="accent" (click)="payProsumer()">
+          Pay Progumer
+        </button>
+      </mat-cell>
+    </ng-container>
+
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
@@ -28,14 +42,6 @@
 <div class="button-container">
   <button mat-raised-button color="accent" (click)="getProsumerArray()">
     Get Prosumer
-  </button>
-  &nbsp;
-</div>
-
-&nbsp;
-<div class="button-container">
-  <button mat-raised-button color="accent" (click)="payProsumer()">
-    Pay Progumer
   </button>
   &nbsp;
 </div>
