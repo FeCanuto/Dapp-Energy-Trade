@@ -24,7 +24,7 @@
     <ng-container matColumnDef="payProsumer">
       <mat-header-cell *matHeaderCellDef> Pagar Prosumer</mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <button mat-raised-button color="accent" (click)="payProsumer()">
+        <button mat-raised-button color="accent" (click)="payProsumer(element.prosumerAddress)">
           Pay Progumer
         </button>
       </mat-cell>
