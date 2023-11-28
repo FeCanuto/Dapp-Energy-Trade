@@ -25,7 +25,7 @@
       <mat-header-cell *matHeaderCellDef> Pagar Prosumer</mat-header-cell>
       <mat-cell *matCellDef="let element">
         <button mat-raised-button color="accent" (click)="payProsumer(element.prosumerAddress)">
-          Pay Progumer
+          <mat-icon> attach_money</mat-icon>&nbsp;Pagar Progumer
         </button>
       </mat-cell>
     </ng-container>
@@ -41,7 +41,7 @@
 &nbsp;
 <div class="button-container">
   <button mat-raised-button color="accent" (click)="getProsumerArray()">
-    Get Prosumer
+    <mat-icon>update</mat-icon>&nbsp;Atualizar tabela
   </button>
   &nbsp;
 </div>
