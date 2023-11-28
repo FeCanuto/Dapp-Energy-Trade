@@ -1,6 +1,7 @@
 <div class="body">
-
   <mat-card class="account">
+    <h3>Adicionar Prosumer</h3>
+    &nbsp;
     <form [formGroup]="transactionForm" (ngSubmit)="setProsumer($event)">
       <mat-form-field appearance="outline">
         <mat-label>Endereço prosumer</mat-label>
@@ -22,7 +23,7 @@
         <mat-icon matSuffix>bolt</mat-icon>
         <mat-hint></mat-hint>
       </mat-form-field>
-    &nbsp;
+      &nbsp;
       <mat-form-field appearance="outline">
         <mat-label>Energia injetada</mat-label>
         <input matInput type="number" min=0 placeholder="Placeholder" formControlName="energiaInjetada">
@@ -34,7 +35,12 @@
     <div class="button-container">
       <button mat-raised-button color="accent" [disabled]="!transactionForm.valid" (click)="setProsumer($event)">
         <mat-icon *ngIf="!transactionForm.valid">lock</mat-icon>
-        <mat-icon *ngIf="transactionForm.valid">input</mat-icon>&nbsp;Settar prosumer
+        <mat-icon *ngIf="transactionForm.valid">input</mat-icon>&nbsp;Manual
+      </button>
+      &nbsp;
+      &nbsp;
+      <button mat-raised-button color="accent" (click)="setProsumerByApi()">
+        <mat-icon> import_export</mat-icon>&nbsp;Automático
       </button>
       &nbsp;
     </div>
