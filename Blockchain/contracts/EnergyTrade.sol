@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 contract EnergyTrade {
     IERC20 private _token;
     address public owner;
-    address[] public prosumer;
+    address[] public prosumersAddress;
     uint256 public prosumerCount;
     mapping(address => Prosumer) addressToProsumer;
 
@@ -46,7 +46,7 @@ contract EnergyTrade {
             });
 
             addressToProsumer[endereco] = newprosumer;
-            prosumer.push(endereco);
+            prosumersAddress.push(endereco);
             prosumerCount++;
         } else {
             addressToProsumer[endereco].prosumerAddress = endereco;
@@ -59,7 +59,7 @@ contract EnergyTrade {
     function getProsumerArr() public view returns (Prosumer[] memory) {
         Prosumer[] memory result = new Prosumer[](prosumerCount);
         for (uint256 i = 0; i < prosumerCount; i++) {
-            result[i] = addressToProsumer[prosumer[i]];
+            result[i] = addressToProsumer[prosumersAddress[i]];
         }
 
         return result;
@@ -76,10 +76,8 @@ contract EnergyTrade {
         uint256 value = addressToProsumer[endereco].energiaInjetada -
             addressToProsumer[endereco].energiaConsumida;
 
+        addressToProsumer[endereco].energiaInjetada = 0;
+        addressToProsumer[endereco].energiaConsumida = 0;
         _token.transferFrom(from, endereco, value);
-    }
-
-    function info() public view returns (uint256) {
-        return _token.totalSupply();
     }
 }
