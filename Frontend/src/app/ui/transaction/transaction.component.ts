@@ -7,6 +7,8 @@ import {
 } from "@angular/forms";
 
 import { RenewableContractService } from "src/app/services/contract/renewable.contract.service";
+import { Prosumer } from '../../models/prosumer/prosumer';
+import { ProsumerService } from '../../services/prosumerService/prosumer.service';
 
 @Component({
   selector: "app-transaction",
@@ -22,10 +24,13 @@ export class TransactionComponent implements OnInit {
   amount: number;
   direction: any;
   transactionForm: FormGroup;
+  prosumer = {} as Prosumer;
+  prosumers: Prosumer[];
 
   constructor(
     private fb: FormBuilder,
-    private contract: RenewableContractService
+    private contract: RenewableContractService,
+    private prosumerService: ProsumerService
   ) {
     this.transactionForm = new FormGroup({
       unidadeConsumidora: new FormControl("", [Validators.required]),
@@ -48,7 +53,29 @@ export class TransactionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.transactionForm.valueChanges.subscribe((x) => {});
+    this.getProsumer();
+    this.transactionForm.valueChanges.subscribe((x) => { });
+  }
+
+  //Http get do API Rest
+  getProsumer() {
+    this.prosumerService.getProsumers().subscribe((prosumer: Prosumer[]) => {
+      this.prosumers = prosumer;
+    });
+
+    console.log(this.prosumers)
+  }
+
+  //Set Prosumer obtidos pela API
+  setProsumerByApi() {
+    this.getProsumer();
+    this.prosumers.forEach(prosumer => {
+      this.contract.settingProsumer(this.direction, 
+        prosumer.prosumerAddress, 
+        prosumer.uc, 
+        prosumer.energiaConsumida,
+        prosumer.energiaInjetada)
+    });
   }
 
   setProsumer(e) {
